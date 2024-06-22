@@ -1,0 +1,3 @@
+# unit-tests: Run all go-tempest unit tests without coverage
+unit-tests:
+	go test -v ./...

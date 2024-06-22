@@ -10,12 +10,17 @@ type AirMeasurement struct {
 	Pressure    float64 // millibars.
 }
 
-// F returns the temperature in degrees Fahrenheit.
+// C returns the air temperature in degrees Celsius.
+func (a *AirMeasurement) C() float64 {
+	return a.Temperature
+}
+
+// F returns the air temperature in degrees Fahrenheit.
 func (a *AirMeasurement) F() float64 {
 	return (a.Temperature * 9 / 5) + 32.0
 }
 
-// K returns the temperature in Kelvin.
+// K returns the air temperature in Kelvin.
 func (a *AirMeasurement) K() float64 {
 	return a.Temperature + 273.15
 }
@@ -30,7 +35,12 @@ func (a *AirMeasurement) DewPointF() float64 {
 	return (a.DewPointC() * 9 / 5) + 32.0
 }
 
+// Pascal returns the millibar pressure in pascals.
+func (a *AirMeasurement) Pascal() float64 {
+	return a.Pressure * 100
+}
+
 // InHg returns the pressure in inches of mercury.
 func (a *AirMeasurement) InHg() float64 {
-	return a.Pressure * 0.02953
+	return a.Pascal() / 3386.389
 }
