@@ -2,12 +2,12 @@ package tempest
 
 // AirMeasurement is a sample of air data from a sensor.
 type AirMeasurement struct {
-	Sensor      *WeatherSensor
-	Hub         *Hub
-	EventTime   int64
-	Temperature TempReading     // degrees Celsius.
-	Humidity    float64         // relative humidity percentage.
-	Pressure    PressureReading // millibars.
+	Sensor      *WeatherSensor  // The sensor that sent the data.
+	Hub         *Hub            // The hub that received the data.
+	EventTime   int64           // Epoch seconds UTC.
+	Temperature TempReading     // Air temp reading in degrees Celsius.
+	Humidity    float64         // Air temp reading relative humidity percentage (0-100%).
+	Pressure    PressureReading // Air pressure reading in millibars (hPa).
 }
 
 // C returns the air temperature in degrees Celsius.
