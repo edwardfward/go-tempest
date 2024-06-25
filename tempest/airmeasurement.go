@@ -5,9 +5,9 @@ type AirMeasurement struct {
 	Sensor      *WeatherSensor
 	Hub         *Hub
 	EventTime   int64
-	Temperature TempReading // degrees Celsius.
-	Humidity    float64     // relative humidity percentage.
-	Pressure    float64     // millibars.
+	Temperature TempReading     // degrees Celsius.
+	Humidity    float64         // relative humidity percentage.
+	Pressure    PressureReading // millibars.
 }
 
 // C returns the air temperature in degrees Celsius.
@@ -17,12 +17,12 @@ func (a *AirMeasurement) C() float64 {
 
 // F returns the air temperature in degrees Fahrenheit.
 func (a *AirMeasurement) F() float64 {
-	return (a.Temperature.F() * 9 / 5) + 32.0
+	return a.Temperature.F()
 }
 
 // K returns the air temperature in Kelvin.
 func (a *AirMeasurement) K() float64 {
-	return a.Temperature.K() + 273.15
+	return a.Temperature.K()
 }
 
 // DewPointC returns the dew point in degrees Celsius.
@@ -37,10 +37,10 @@ func (a *AirMeasurement) DewPointF() float64 {
 
 // Pascal returns the millibar pressure in pascals.
 func (a *AirMeasurement) Pascal() float64 {
-	return a.Pressure * 100
+	return a.Pressure.Pascal()
 }
 
 // InHg returns the pressure in inches of mercury.
 func (a *AirMeasurement) InHg() float64 {
-	return a.Pascal() / 3386.389
+	return a.Pressure.InHg()
 }

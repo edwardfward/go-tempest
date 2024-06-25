@@ -20,6 +20,9 @@ type Hub struct {
 	// Firmware version of the hub.
 	FirmwareVersion string `json:"firmware_revision"`
 
+	// Frequency of the hub's radio.
+	RadioFrequency int `json:"radio_frequency"` // MHz
+
 	// Time the hub was last seen on the network.
 	LastReported time.Time `json:"report_time"`
 }
