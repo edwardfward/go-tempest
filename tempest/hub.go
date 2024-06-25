@@ -1,9 +1,15 @@
 package tempest
 
 import (
+	"context"
 	"net"
 	"time"
 )
+
+type HubRepo interface {
+	LoadHubs(ctx context.Context) ([]*Hub, error)
+	SaveHub(ctx context.Context, hub *Hub) error
+}
 
 // Hub represents a Tempest hub connected to the network reporting data
 // from zero or more sensors connected to the hub.
@@ -20,6 +26,6 @@ type Hub struct {
 	// Firmware version of the hub.
 	FirmwareVersion string `json:"firmware_revision"`
 
-	// Last time the hub was seen on the network.
+	// Time the hub was last seen on the network.
 	LastReported time.Time `json:"report_time"`
 }

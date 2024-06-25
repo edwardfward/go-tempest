@@ -20,14 +20,34 @@ import (
 // The hub broadcasts the messages to the network
 // on the broadcast address on port 50222 using UDP.
 type Network struct {
-	NetworkName    string              // Name of the network.
-	Hubs           map[string]*Hub     // Hubs on the network.
-	udpConn        *net.UDPConn        // UDP connection to the network.
-	stop           chan struct{}       // Channel to signal the network to stop.
-	networkMessage chan networkMessage // Channel to process messages.
+	// Name of the network (e.g. "tempest").
+	NetworkName string // Name of the network.
+
+	// Hubs on the network.
+	// The key is the hub serial number.
+	// The network will add hubs as messages are received.
+	hubs map[string]*Hub
+
+	// UDP connection to the network.
+	udpConn *net.UDPConn
+
+	// Channel to stop the network.
+	stop chan struct{}
+
+	// Channel to process raw messages.
+	networkMessage chan networkMessage
+
+	// MessageRepo to store messages.
+	messageRepo MessageRepo
+
+	// SensorRepo to store sensors.
+	sensorRepo SensorRepo
+
+	// HubRepo to store hubs.
+	hubRepo HubRepo
 }
 
-// networkMessage represents a message received from the network.
+// networkMessage is a message received on the network.
 type networkMessage struct {
 	raw   RawMessage
 	hubIp net.IP
@@ -37,7 +57,7 @@ type networkMessage struct {
 func NewNetwork(name string) *Network {
 	return &Network{
 		NetworkName: name,
-		Hubs:        make(map[string]*Hub),
+		hubs:        make(map[string]*Hub),
 		stop:        make(chan struct{}),
 	}
 }
@@ -149,7 +169,7 @@ func (n *Network) processMessage(networkMessage <-chan networkMessage) error {
 					continue
 				}
 
-				fmt.Printf("rapid wind event: %v\n", rapidWindEvent)
+				fmt.Printf("Wind speed (m/s) - %0f", rapidWindEvent.WindSpeed)
 
 			default:
 				fmt.Printf("unhandled message type: %s\n", msgType)
@@ -160,7 +180,7 @@ func (n *Network) processMessage(networkMessage <-chan networkMessage) error {
 
 // addHub adds a hub to the network.
 func (n *Network) addHub(serialNumber string, ip net.IP) {
-	n.Hubs[serialNumber] = &Hub{
+	n.hubs[serialNumber] = &Hub{
 		HubSerialNumber: serialNumber,
 		WeatherSensors:  make(map[string]*WeatherSensor),
 		LastReported:    time.Now(),
@@ -170,11 +190,11 @@ func (n *Network) addHub(serialNumber string, ip net.IP) {
 
 // updateHub updates the hub on the network.
 func (n *Network) updateHub(serialNumber string, ip net.IP) *Hub {
-	hub, found := n.Hubs[serialNumber]
+	hub, found := n.hubs[serialNumber]
 	if !found {
 		fmt.Printf("hub not found, adding hub: %s\n", serialNumber)
 		n.addHub(serialNumber, ip)
-		return n.Hubs[serialNumber]
+		return n.hubs[serialNumber]
 	}
 
 	hub.IPAddress = ip
@@ -185,11 +205,11 @@ func (n *Network) updateHub(serialNumber string, ip net.IP) *Hub {
 
 // addSensor adds a sensor to the network.
 func (n *Network) addSensor(hubSerial string, sensorSerial string, ip net.IP) {
-	hub, hubFound := n.Hubs[hubSerial]
+	hub, hubFound := n.hubs[hubSerial]
 	if !hubFound {
 		// No hub found, add the hub and sensor.
 		n.addHub(hubSerial, ip)
-		hub = n.Hubs[hubSerial]
+		hub = n.hubs[hubSerial]
 
 		hub.WeatherSensors[sensorSerial] = &WeatherSensor{
 			SensorSerialNumber: sensorSerial,
@@ -208,12 +228,12 @@ func (n *Network) addSensor(hubSerial string, sensorSerial string, ip net.IP) {
 
 // updateSensor updates the sensor on the network.
 func (n *Network) updateSensor(hubSerial string, sensorSerial string, ip net.IP) *WeatherSensor {
-	if hub, hubFound := n.Hubs[hubSerial]; hubFound {
+	if hub, hubFound := n.hubs[hubSerial]; hubFound {
 		sensor, sensorFound := hub.WeatherSensors[sensorSerial]
 		if !sensorFound {
 			// No sensor found, add the sensor.
 			n.addSensor(hubSerial, sensorSerial, ip)
-			return n.Hubs[hubSerial].WeatherSensors[sensorSerial]
+			return n.hubs[hubSerial].WeatherSensors[sensorSerial]
 		}
 
 		sensor.LastMessage = time.Now()
@@ -223,7 +243,7 @@ func (n *Network) updateSensor(hubSerial string, sensorSerial string, ip net.IP)
 	// No hub found, add the hub and sensor.
 	n.addSensor(hubSerial, sensorSerial, ip)
 
-	return n.Hubs[hubSerial].WeatherSensors[sensorSerial]
+	return n.hubs[hubSerial].WeatherSensors[sensorSerial]
 }
 
 // listen for messages on the network.
