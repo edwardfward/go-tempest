@@ -78,3 +78,21 @@ func (p *Pressure) Hectopascal() float64 {
 
 	return 0.0
 }
+
+// SeaLevelPressure returns the pressure adjusted for elevation.
+func (p *Pressure) SeaLevelPressure(elevation Distance) Pressure {
+	// Convert the elevation to meters.
+	meters := elevation.Meters()
+
+	// Convert the pressure to pascals.
+	pascals := p.Pascal()
+
+	// Calculate the pressure at sea level.
+	seaLevel := pascals / (1 - (meters / 44330.0))
+
+	// Return the adjusted pressure.
+	return Pressure{
+		pressure: seaLevel,
+		unit:     Pascal,
+	}
+}

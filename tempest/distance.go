@@ -11,19 +11,19 @@ const (
 	Yards
 )
 
-// DistanceMeasurement represents a distance measurement.
-type DistanceMeasurement struct {
+// Distance represents a distance measurement.
+type Distance struct {
 	Distance float64
 	Unit     DistanceUnit
 }
 
-// NewDistanceMeasurement creates a new distance measurement.
-func NewDistanceMeasurement(distance float64, unit DistanceUnit) *DistanceMeasurement {
-	return &DistanceMeasurement{Distance: distance, Unit: unit}
+// NewDistance creates a new distance measurement.
+func NewDistance(distance float64, unit DistanceUnit) *Distance {
+	return &Distance{Distance: distance, Unit: unit}
 }
 
 // Meters the distance in meters.
-func (d *DistanceMeasurement) Meters() float64 {
+func (d *Distance) Meters() float64 {
 	switch d.Unit {
 	case Meters:
 		return d.Distance
@@ -42,7 +42,7 @@ func (d *DistanceMeasurement) Meters() float64 {
 }
 
 // Kilometers the distance in kilometers.
-func (d *DistanceMeasurement) Kilometers() float64 {
+func (d *Distance) Kilometers() float64 {
 	switch d.Unit {
 	case Meters:
 		return d.Distance / 1000
@@ -61,7 +61,7 @@ func (d *DistanceMeasurement) Kilometers() float64 {
 }
 
 // Miles the distance in miles.
-func (d *DistanceMeasurement) Miles() float64 {
+func (d *Distance) Miles() float64 {
 	switch d.Unit {
 	case Meters:
 		return d.Distance / 1609.34
@@ -80,7 +80,7 @@ func (d *DistanceMeasurement) Miles() float64 {
 }
 
 // NauticalMiles the distance in nautical miles.
-func (d *DistanceMeasurement) NauticalMiles() float64 {
+func (d *Distance) NauticalMiles() float64 {
 	switch d.Unit {
 	case Meters:
 		return d.Distance / 1852
@@ -99,7 +99,7 @@ func (d *DistanceMeasurement) NauticalMiles() float64 {
 }
 
 // Feet the distance in feet.
-func (d *DistanceMeasurement) Feet() float64 {
+func (d *Distance) Feet() float64 {
 	switch d.Unit {
 	case Meters:
 		return d.Distance / 0.3048
@@ -118,7 +118,7 @@ func (d *DistanceMeasurement) Feet() float64 {
 }
 
 // Yards the distance in yards.
-func (d *DistanceMeasurement) Yards() float64 {
+func (d *Distance) Yards() float64 {
 	switch d.Unit {
 	case Meters:
 		return d.Distance / 0.9144
