@@ -212,8 +212,8 @@ func (n *Network) addSensor(hubSerial string, sensorSerial string, ip net.IP) {
 		hub = n.hubs[hubSerial]
 
 		hub.WeatherSensors[sensorSerial] = &WeatherSensor{
-			SensorSerialNumber: sensorSerial,
-			LastMessage:        time.Now(),
+			SensorSerial: sensorSerial,
+			LastMessage:  time.Now(),
 		}
 
 		return
@@ -221,8 +221,8 @@ func (n *Network) addSensor(hubSerial string, sensorSerial string, ip net.IP) {
 
 	// Hub found, add the sensor.
 	hub.WeatherSensors[sensorSerial] = &WeatherSensor{
-		SensorSerialNumber: sensorSerial,
-		LastMessage:        time.Now(),
+		SensorSerial: sensorSerial,
+		LastMessage:  time.Now(),
 	}
 }
 
