@@ -15,6 +15,14 @@ type Pressure struct {
 	unit     PressureUnit
 }
 
+// NewPressure creates a new pressure reading.
+func NewPressure(pressure float64, unit PressureUnit) Pressure {
+	return Pressure{
+		pressure: pressure,
+		unit:     unit,
+	}
+}
+
 // InHg returns the pressure in inches of mercury.
 func (p *Pressure) InHg() float64 {
 	switch p.unit {

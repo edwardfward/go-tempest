@@ -18,8 +18,11 @@ type Distance struct {
 }
 
 // NewDistance creates a new distance measurement.
-func NewDistance(distance float64, unit DistanceUnit) *Distance {
-	return &Distance{Distance: distance, Unit: unit}
+func NewDistance(distance float64, unit DistanceUnit) Distance {
+	return Distance{
+		Distance: distance,
+		Unit:     unit,
+	}
 }
 
 // Meters the distance in meters.

@@ -25,6 +25,24 @@ func NewSpeed(speed float64, unit SpeedUnit) Speed {
 	}
 }
 
+// MetersPerSecond converts the speed to meters per second.
+func (s *Speed) MetersPerSecond() float64 {
+	switch s.unit {
+	case MetersPerSecond:
+		return s.speed
+	case KilometersPerHour:
+		return s.speed / 3.6
+	case MilesPerHour:
+		return s.speed / 2.23694
+	case Knots:
+		return s.speed / 1.94384
+	case FeetPerSecond:
+		return s.speed / 3.28084
+	}
+
+	return 0
+}
+
 // KPH converts the speed to kilometers per hour.
 func (s *Speed) KPH() float64 {
 	switch s.unit {

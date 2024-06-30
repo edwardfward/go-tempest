@@ -286,6 +286,7 @@ func (n *Network) listen() error {
 			// Write the message to the buffer.
 			messageBuffer.Write(buffer[:bytesRead])
 			data = messageBuffer.Bytes()
+			fmt.Printf("received message: %s\n", data)
 
 			// Process the message.
 			for len(data) > 0 {
