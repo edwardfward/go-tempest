@@ -1,5 +1,9 @@
 package tempest
 
+import "math"
+
+// DirectionUnit represents a unit of measurement
+// for a direction.
 type DirectionUnit int
 
 const (
@@ -9,10 +13,71 @@ const (
 	Mils
 )
 
+// CardinalDirection represents a cardinal direction.
+type CardinalDirection string
+
+const (
+	N   CardinalDirection = "N"
+	NNE CardinalDirection = "NNE"
+	NE  CardinalDirection = "NE"
+	ENE CardinalDirection = "ENE"
+	E   CardinalDirection = "E"
+	ESE CardinalDirection = "ESE"
+	SE  CardinalDirection = "SE"
+	SSE CardinalDirection = "SSE"
+	S   CardinalDirection = "S"
+	SSW CardinalDirection = "SSW"
+	SW  CardinalDirection = "SW"
+	WSW CardinalDirection = "WSW"
+	W   CardinalDirection = "W"
+	WNW CardinalDirection = "WNW"
+	NW  CardinalDirection = "NW"
+	NNW CardinalDirection = "NNW"
+)
+
+// Degrees the degree measurement for a cardinal direction.
+func (cd CardinalDirection) Degrees() float64 {
+	switch cd {
+	case N:
+		return 0
+	case NNE:
+		return 22.5
+	case NE:
+		return 45
+	case ENE:
+		return 67.5
+	case E:
+		return 90
+	case ESE:
+		return 112.5
+	case SE:
+		return 135
+	case SSE:
+		return 157.5
+	case S:
+		return 180
+	case SSW:
+		return 202.5
+	case SW:
+		return 225
+	case WSW:
+		return 247.5
+	case W:
+		return 270
+	case WNW:
+		return 292.5
+	case NW:
+		return 315
+	case NNW:
+		return 337.5
+	}
+	return 0
+}
+
 // Direction represents a direction measurement reported
 // by a sensor to the hub.
 type Direction struct {
-	direction interface{}
+	direction float64
 	unit      DirectionUnit
 }
 
@@ -25,23 +90,70 @@ func NewDirection(reading interface{}, unit DirectionUnit) Direction {
 		case string:
 			return Direction{
 				direction: cardinalDegrees(reading.(string)),
+				unit:      unit,
 			}
+		case float64, int:
+			dir := cardinalDirection(reading.(float64))
+			return Direction{
+				direction: cardinalDegrees(dir),
+				unit:      unit,
+			}
+		default:
+			return Direction{}
 		}
 	case Degrees:
 		switch reading.(type) {
-		case float64:
+		case float64, int:
 			return Direction{
 				direction: reading.(float64),
 				unit:      unit,
 			}
+		case string:
+			return Direction{
+				direction: cardinalDegrees(reading.(string)),
+				unit:      unit,
+			}
+		default:
+			return Direction{}
+		}
+	case Radians:
+		switch reading.(type) {
+		case float64, int:
+			return Direction{
+				direction: reading.(float64),
+				unit:      unit,
+			}
+		case string:
+			deg := cardinalDegrees(reading.(string))
+			rad := degreesToRadians(deg)
+
+			return Direction{
+				direction: rad,
+				unit:      unit,
+			}
+		default:
+			return Direction{}
+		}
+	case Mils:
+		switch reading.(type) {
+		case float64, int:
+			return Direction{
+				direction: reading.(float64),
+				unit:      unit,
+			}
+		case string:
+			deg := cardinalDegrees(reading.(string))
+			mil := degreesToMils(deg)
+
+			return Direction{
+				direction: mil,
+				unit:      unit,
+			}
+		default:
+			return Direction{}
 		}
 	default:
-		panic("unhandled default case")
-	}
-
-	return Direction{
-		direction: reading,
-		unit:      unit,
+		return Direction{}
 	}
 }
 
@@ -64,7 +176,7 @@ func (d Direction) Cardinal() string {
 func (d Direction) Degrees() float64 {
 	switch d.unit {
 	case Cardinal:
-		return cardinalDegrees(&d.direction)
+		return cardinalDegrees(d.Cardinal())
 	case Degrees:
 		return d.direction
 	case Radians:
@@ -158,4 +270,14 @@ func cardinalDegrees(cardinalDirection string) float64 {
 	default:
 		return 0
 	}
+}
+
+// degreesToRadians converts degrees to radians.
+func degreesToRadians(deg float64) float64 {
+	return deg * math.Pi / 180
+}
+
+// degreesToMils converts degrees to mils.
+func degreesToMils(deg float64) float64 {
+	return deg * 6400 / 360
 }
