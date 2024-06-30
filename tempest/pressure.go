@@ -80,6 +80,7 @@ func (p *Pressure) Hectopascal() float64 {
 }
 
 // SeaLevelPressure returns the pressure adjusted for elevation.
+// https://en.wikipedia.org/wiki/Barometric_formula
 func (p *Pressure) SeaLevelPressure(elevation Distance) Pressure {
 	// Convert the elevation to meters.
 	meters := elevation.Meters()

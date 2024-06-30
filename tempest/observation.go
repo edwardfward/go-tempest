@@ -27,29 +27,30 @@ const (
 
 // Observation represents a weather observation from a sensor.
 type Observation struct {
-	Sensor       WeatherSensor
-	Hub          Hub
+	SensorSerial string
+	HubSerial    string
+	Coordinate   Coordinate
 	Observations []WeatherObservation
 }
 
 // WeatherObservation message type.
 type WeatherObservation struct {
-	EpochSecondsUTC    int64       // Epoch seconds UTC
-	WindLull           Speed       // m/s
-	WindAverage        Speed       // m/s
-	WindGust           Speed       // m/s
-	WindDirection      float64     // degrees
-	WindSampleInterval int         // seconds
-	StationPressure    Pressure    // millibars
-	AirTemperature     TempReading // degrees Celsius
-	RelativeHumidity   float64     // percentage 0-100
-	Illuminance        int         // lux
-	UV                 int         // UV index 0-11
-	SolarRadiation     int         // W/m2
-	RainAccumulation   float64
-	PrecipitationType  int
-	LightningStrikeAvg float64
-	LightningStrikeCnt int
-	BatteryVolts       float64
-	ReportingInterval  int
+	EpochSecondsUTC    int64     // Epoch seconds UTC
+	WindLull           Speed     // meters per second
+	WindAverage        Speed     // meters per second
+	WindGust           Speed     // meters per second
+	WindDirection      Direction // degrees
+	WindSampleInterval int       // seconds
+	StationPressure    Pressure  // millibars
+	AirTemperature     Temp      // degrees Celsius
+	RelativeHumidity   float64   // percentage 0-100
+	Illuminance        int       // lux
+	UV                 int       // UV index 0-11
+	SolarRadiation     int       // watts per square meter
+	RainAccumulation   float64   // millimeters per minute
+	PrecipitationType  int       // 0=none, 1=rain, 2=hail, 3=hail+rain
+	LightningStrikeAvg Distance  // average lightning strike distance in kilometers
+	LightningStrikeCnt int       // lightning strike count
+	BatteryVolts       float64   // sensor battery voltage
+	ReportingInterval  int       // sensor reporting interval minutes
 }
