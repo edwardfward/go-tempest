@@ -8,22 +8,22 @@ const (
 	Kelvin
 )
 
-// TempReading in unit degrees.
-type TempReading struct {
+// Temp represents a temperature reading.
+type Temp struct {
 	Reading float64
 	Units   TempUnit
 }
 
-// NewTempReading creates a new temperature reading.
-func NewTempReading(reading float64, units TempUnit) TempReading {
-	return TempReading{
+// NewTemp creates a new temperature reading.
+func NewTemp(reading float64, units TempUnit) Temp {
+	return Temp{
 		Reading: reading,
 		Units:   units,
 	}
 }
 
 // C returns the temperature reading in degrees Celsius.
-func (t TempReading) C() float64 {
+func (t Temp) C() float64 {
 	switch t.Units {
 	case Celsius:
 		return t.Reading
@@ -36,7 +36,7 @@ func (t TempReading) C() float64 {
 }
 
 // F returns the temperature reading in degrees Fahrenheit.
-func (t TempReading) F() float64 {
+func (t Temp) F() float64 {
 	switch t.Units {
 	case Celsius:
 		return (t.Reading * 9 / 5) + 32.0
@@ -49,7 +49,7 @@ func (t TempReading) F() float64 {
 }
 
 // K returns the temperature reading in Kelvin.
-func (t TempReading) K() float64 {
+func (t Temp) K() float64 {
 	switch t.Units {
 	case Celsius:
 		return t.Reading + 273.15

@@ -9,14 +9,14 @@ const (
 	hPa
 )
 
-// PressureReading represents a pressure reading.
-type PressureReading struct {
+// Pressure represents a pressure reading.
+type Pressure struct {
 	pressure float64
 	unit     PressureUnit
 }
 
 // InHg returns the pressure in inches of mercury.
-func (p *PressureReading) InHg() float64 {
+func (p *Pressure) InHg() float64 {
 	switch p.unit {
 	case Millibar:
 		return p.pressure / 33.8639
@@ -32,7 +32,7 @@ func (p *PressureReading) InHg() float64 {
 }
 
 // Millibar returns the pressure in millibars.
-func (p *PressureReading) Millibar() float64 {
+func (p *Pressure) Millibar() float64 {
 	switch p.unit {
 	case Millibar:
 		return p.pressure
@@ -48,7 +48,7 @@ func (p *PressureReading) Millibar() float64 {
 }
 
 // Pascal returns the pressure in pascals.
-func (p *PressureReading) Pascal() float64 {
+func (p *Pressure) Pascal() float64 {
 	switch p.unit {
 	case Millibar:
 		return p.pressure * 100
@@ -64,7 +64,7 @@ func (p *PressureReading) Pascal() float64 {
 }
 
 // Hectopascal returns the pressure in hectopascals.
-func (p *PressureReading) Hectopascal() float64 {
+func (p *Pressure) Hectopascal() float64 {
 	switch p.unit {
 	case Millibar:
 		return p.pressure

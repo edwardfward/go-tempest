@@ -2,13 +2,13 @@ package tempest
 
 // WindMeasurement represents a wind measurement reported by a sensor to the hub.
 type WindMeasurement struct {
-	Sensor    *WeatherSensor
-	Hub       *Hub
-	Direction float64      // degrees 0 - 359.9
-	Speed     SpeedReading // meters per second
-	Time      int64        // Epoch UTC
-	Lull      float64      // meters per second
-	Gust      float64      // meters per second
+	SensorSerial string    // Sensor reporting the event to the hub.
+	HubSerial    string    // The hub reporting the event to the network.
+	Direction    Direction // degrees 0 - 359.9
+	Speed        Speed     // meters per second
+	Time         int64     // Epoch UTC
+	Lull         Speed     // meters per second
+	Gust         Speed     // meters per second
 }
 
 // KPH wind speed in kilometers per hour.

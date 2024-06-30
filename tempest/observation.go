@@ -25,25 +25,27 @@ const (
 	EventTypeObservation = "obs_st"
 )
 
+// Observation represents a weather observation from a sensor.
 type Observation struct {
 	Sensor       WeatherSensor
 	Hub          Hub
-	Observations []Obs
+	Observations []WeatherObservation
 }
 
-type Obs struct {
-	TimestampEpochUTC  int64
-	WindLull           float64
-	WindAverage        float64
-	WindGust           float64
-	WindDirection      float64
-	WindSampleInterval int
-	StationPressure    float64
-	AirTemperature     float64
-	RelativeHumidity   float64
-	Illuminance        int
-	UV                 int
-	SolarRadiation     int
+// WeatherObservation message type.
+type WeatherObservation struct {
+	EpochSecondsUTC    int64       // Epoch seconds UTC
+	WindLull           Speed       // m/s
+	WindAverage        Speed       // m/s
+	WindGust           Speed       // m/s
+	WindDirection      float64     // degrees
+	WindSampleInterval int         // seconds
+	StationPressure    Pressure    // millibars
+	AirTemperature     TempReading // degrees Celsius
+	RelativeHumidity   float64     // percentage 0-100
+	Illuminance        int         // lux
+	UV                 int         // UV index 0-11
+	SolarRadiation     int         // W/m2
 	RainAccumulation   float64
 	PrecipitationType  int
 	LightningStrikeAvg float64

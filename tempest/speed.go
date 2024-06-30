@@ -11,22 +11,22 @@ const (
 	FeetPerSecond
 )
 
-// SpeedReading represents a speed reading from the Tempest device.
-type SpeedReading struct {
+// Speed represents a speed reading from the Tempest device.
+type Speed struct {
 	speed float64
 	unit  SpeedUnit
 }
 
-// NewSpeedReading creates a new speed reading.
-func NewSpeedReading(speed float64, unit SpeedUnit) *SpeedReading {
-	return &SpeedReading{
+// NewSpeed creates a new speed reading.
+func NewSpeed(speed float64, unit SpeedUnit) Speed {
+	return Speed{
 		speed: speed,
 		unit:  unit,
 	}
 }
 
 // KPH converts the speed to kilometers per hour.
-func (s *SpeedReading) KPH() float64 {
+func (s *Speed) KPH() float64 {
 	switch s.unit {
 	case MetersPerSecond:
 		return s.speed * 3.6
@@ -43,7 +43,7 @@ func (s *SpeedReading) KPH() float64 {
 }
 
 // MPH converts the speed to miles per hour.
-func (s *SpeedReading) MPH() float64 {
+func (s *Speed) MPH() float64 {
 	switch s.unit {
 	case MetersPerSecond:
 		return s.speed * 2.23694
@@ -60,7 +60,7 @@ func (s *SpeedReading) MPH() float64 {
 }
 
 // KTS converts the speed to knots.
-func (s *SpeedReading) KTS() float64 {
+func (s *Speed) KTS() float64 {
 	switch s.unit {
 	case MetersPerSecond:
 		return s.speed * 1.94384
@@ -77,7 +77,7 @@ func (s *SpeedReading) KTS() float64 {
 }
 
 // FPS converts the speed to feet per second.
-func (s *SpeedReading) FPS() float64 {
+func (s *Speed) FPS() float64 {
 	switch s.unit {
 	case MetersPerSecond:
 		return s.speed * 3.28084

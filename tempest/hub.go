@@ -5,8 +5,8 @@ import (
 	"time"
 )
 
-// Hub represents a Tempest hub connected to the network reporting data
-// from zero or more sensors connected to the hub.
+// Hub is a Tempest hub connected to the network reporting data
+// from one or more sensors connected to the hub.
 type Hub struct {
 	// Serial number of the hub.
 	HubSerialNumber string `json:"hub_sn"`
